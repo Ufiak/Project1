@@ -91,6 +91,7 @@ namespace MorzkulcPhotoConverterUpgrade
         /// <param name="xmlFilePath">The path to the XML File.</param>
         public ImageMetaDataContainer(string xmlFilePath)
         {
+
             XElement xmlPCC = XElement.Load(xmlFilePath);
 
             input = xmlPCC.Element("input").Value;
@@ -115,6 +116,7 @@ namespace MorzkulcPhotoConverterUpgrade
                 Directory.CreateDirectory(destinationFolder);
             }
 
+
             destinationFile = xmlPCC.Element("destinationFile").Value;
             destinationFullPath = destinationFolder + "\\" + destinationFile + "." + format;
 
@@ -131,7 +133,7 @@ namespace MorzkulcPhotoConverterUpgrade
         /// <param name="destinationContainer">Container for Destination Folder Path, Destination File Name and Destination File Path (if applicable).</param>
         public ImageMetaDataContainer(Tuple<string, string, string> sourceContainer, int newWidth, int newHeight, string newFormat, Tuple<string, string, string> destinationContainer)
         {
-            input = sourceContainer.Item1;
+            input = sourceContainer.Item1; // string input from InputContainer
             sourceOfFolder = sourceContainer.Item2;
             sourceOfFolderAndImage = sourceContainer.Item3;
             width = newWidth;
@@ -143,3 +145,4 @@ namespace MorzkulcPhotoConverterUpgrade
         }
     }
 }
+

@@ -11,24 +11,24 @@ namespace MorzkulcPhotoConverterUpgrade
    public class PhotoConversionContainer
     {
 
-        /// <summary>
         /// This method will kick off all necessary operations for converting and storing the images.
         /// </summary>
         /// <param name="myContainer">The container with most of the information needed to perform this operation.</param>
         /// <param name="files">An array of files, which need to be converted. Only needed when dealing with multiple files.</param>
-        public static void ImageConversionMethod(ImageMetaDataContainer myContainer, string[] files)
+        //public static void ImageConversion(ImageMetaDataContainer myContainer, string[] files) // Private?
+            public static void ImageConversion(ImageMetaDataContainer myContainer, string[] files) 
         {
             if (myContainer.input.Equals("single"))
             {
                 var photo = Image.FromFile(myContainer.sourceOfFolderAndImage, true);
                 var convertedPhoto = ResizeImage(photo, myContainer.width, myContainer.height);
-                FormatMethod(convertedPhoto, myContainer.destinationFullPath, myContainer.format);
+                Format(convertedPhoto, myContainer.destinationFullPath, myContainer.format);
             }
             else
             {
                 List<string> destinationFullPathList = new List<string>();
 
-                Console.WriteLine("files in the given directory: \n");
+                Console.WriteLine("images in the given directory: \n");
                 foreach (string file in files)
                 {
                     Console.WriteLine(file);
@@ -38,7 +38,7 @@ namespace MorzkulcPhotoConverterUpgrade
                 {
                     destinationFullPathList.Add(myContainer.destinationFolder + "\\" + myContainer.destinationFile + i + "." + myContainer.format);
                 }
-                Console.WriteLine("below are objects from destinationFullPathList");
+                Console.WriteLine("below are images from destinationFullPathList");
 
                 foreach (string path in destinationFullPathList)
                 {
@@ -52,12 +52,12 @@ namespace MorzkulcPhotoConverterUpgrade
                     {
                         var photo = Image.FromFile(files[i], true);
                         var convertedPhoto = ResizeImage(photo, myContainer.width, myContainer.height);
-                        FormatMethod(convertedPhoto, destinationFullPathList[i], myContainer.format);
+                        Format(convertedPhoto, destinationFullPathList[i], myContainer.format);
                     }
                 }
             }
         }
-        public static Bitmap ResizeImage(Image image, int width, int height)
+        private static Bitmap ResizeImage(Image image, int width, int height) 
         {
             Bitmap destImage;
             int newWidth = 0;
@@ -116,13 +116,14 @@ namespace MorzkulcPhotoConverterUpgrade
                 using (var wrapMode = new ImageAttributes()) // good stuff for border stuff handling, look below. and also draws image out of a photo.
                 {
                     wrapMode.SetWrapMode(WrapMode.TileFlipXY); // prevents ghosting around the image borders// wraps image so there are no transparent pixels beyond image borders.
-                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode); // Draws a resized image.
+                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode); // Draws a resized image, normally in using var graphics /graphics.DrawImage(image, 0, 0, newWidth, newHeight);/-> image-photo; Rectangle class with newWidth and newHeight ; src X, src Y: 0, 0; original width, original height, specifies measure of the given data, wrap mode. 
                 }
+
             }
             return destImage;
         }
 
-        public static void FormatMethod(Bitmap convertedPhotoM, string whereToPutThePhotoM, string formatM)
+        private static void Format(Bitmap convertedPhotoM, string whereToPutThePhotoM, string formatM) 
         {
             switch (formatM)
             {

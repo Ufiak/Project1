@@ -12,55 +12,38 @@ namespace MorzkulcPhotoConverterUpgrade
             int height = 0;
             string format = "";
             string loadingXML;
-            string input;
 
 
             Console.WriteLine("            Welcome to this amazing \n                Photo Converter! \n               Let's get started!\n");
             
-            loadingXML = OtherMethodsContainer.CheckForXmlConfig();
+            loadingXML = InputContainer.CheckForXmlConfig();
   
             ImageMetaDataContainer myContainer;
-            OtherMethodsContainer source;
 
             if (loadingXML.Equals("yes"))
             {
                 string xmlFilePath = "XML file\\PhotoConverterCommands.xml";
-                myContainer = new ImageMetaDataContainer(xmlFilePath); // !!!!!!!!!!!!!!!! QUESTION to Filip. with no return type in the ImageMetaDataContainer, how it works?
+                myContainer = new ImageMetaDataContainer(xmlFilePath); 
             }
             else
             {
-                input = OtherMethodsContainer.Input();
-                if (input.Equals("single"))
-                {
-                    source = new OtherMethodsContainer.SourceMethod(inputSingle); // it would recqire a whole new class...
-                    // poczytac na tutorialspoint.com/csharp/csharp_methods.html
-                }
-                else if (input.Equals("multiple") || input.Equals("multi"))
-                {
-                    source = new OtherMethodsContainer.SourceMethod(inputMultiple);
-                }
-                else
-
-
-
-                    Tuple<string, string, string> getValueOfSourceMethod = OtherMethodsContainer.SourceMethod(); // this thing will initialise SourceMethod once and will enable to get the values of it for following variables.
-                //getValueOfSourceMethod = new OtherMethodsContainer()
+                Tuple<string, string, string> getValueOfSourceMethod = InputContainer.SourceMethod();
 
                 Console.WriteLine("\nProvide value to height or with to resize image with original aspect ratio for this size. \nOther value write '0' or press enter. \nWrite both values to loose aspect ratio but receive the demanded values");
-                width = OtherMethodsContainer.WidthMethod();
-                height = OtherMethodsContainer.HeightMethod();
-                format = OtherMethodsContainer.FormatMethodCheck();
+                width = InputContainer.Width();
+                height = InputContainer.Height();
+                format = InputContainer.FormatCheck();
 
-                Tuple<string, string, string> getValueOfDestinationMethod = OtherMethodsContainer.DestinationMethod(format);
+                Tuple<string, string, string> getValueOfDestinationMethod = InputContainer.Destination(format);
 
                 myContainer = new ImageMetaDataContainer(getValueOfSourceMethod, width, height, format, getValueOfDestinationMethod);
             }
 
             string joinedformatOfFileInRootFolder = "*.jpg|*.png|*.gif|*.tiff";
-            string[] files = OtherMethodsContainer.GetFiles(myContainer.sourceOfFolder, joinedformatOfFileInRootFolder,SearchOption.AllDirectories);
+            string[] files = InputContainer.GetFiles(myContainer.sourceOfFolder, joinedformatOfFileInRootFolder,SearchOption.AllDirectories);
 
 
-            PhotoConversionContainer.ImageConversionMethod(myContainer, files);
+            PhotoConversionContainer.ImageConversion(myContainer, files);
 
 
             Console.WriteLine("Press any key to continue");

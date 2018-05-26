@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace MorzkulcPhotoConverterUpgrade
 {
-    public class OtherMethodsContainer
+    public class InputContainer
     {
         public string format { get; set; }
         public string destinationFolder { get; set; }
@@ -17,6 +17,7 @@ namespace MorzkulcPhotoConverterUpgrade
         public string sourceOfFolderAndImage { get; set; }
 
         public string sourceOfImageM { get; set; }
+
 
         public string path { get; set; }
         public string searchPattern { get; set; }
@@ -42,12 +43,13 @@ namespace MorzkulcPhotoConverterUpgrade
             return checkconfigFile;
         }
 
-        
-        public static Tuple<string, string, string> DestinationMethod (string format)
+
+        public static Tuple<string, string, string> Destination (string format) 
             {
             string destinationFolder;
             string destinationFile;
             string destinationFullPath;
+
 
             Console.WriteLine("\nProvide destination folder eg. 'e:\\programowanie' (If file does not exist, it will be automaticaly created)");
             destinationFolder = Console.ReadLine();
@@ -68,50 +70,16 @@ namespace MorzkulcPhotoConverterUpgrade
         /// Retrieve the strings for the image source.
         /// </summary>
         /// <returns>Returns a Tuple contaning the User Input, the Source Path of the Folder and the Source Path of the Image, combined with the Folder Path.</returns>
-        
-
-      public static string Input ()
-        {
-            string input;
-
-            Console.WriteLine("Would you like to convert single or multiple images from the folder? (single/multiple)");
-            input = Console.ReadLine().ToLower();
-
-            // idiot proof check for various inputs
-            return input;
-            // return Console.ReadLine().ToLower();
-        }
-
-
-        public static string SourceMethod(string input ) //single
-        {
-            string sourceOfFolder = "";
-            string sourceOfImage = "";
-            string sourceOfFolderAndImage = "";
-
-            Console.WriteLine("Provide source folder file e.g 'e:\\convert");
-            sourceOfFolder = Console.ReadLine();
-            //sourceOfFolder = "e:\\programowanie"; // temporary testValue for a folder
-            Console.WriteLine("Provide source image e.g. 'plakat.png'");
-            sourceOfImage = Console.ReadLine();
-            //sourceOfImage = "plakat.png"; // temporary testValue for an image
-            sourceOfFolderAndImage = sourceOfFolder + "\\" + sourceOfImage;
-            Console.WriteLine("source of Folder and Image: " + sourceOfFolderAndImage);
-
-            return sourceOfFolderAndImage;
-        }
-
-        public  static SourceMethod () //multiple
-        {
-
-        }
-            /*
         public static Tuple<string, string, string> SourceMethod () 
         {
             string input;
             string sourceOfFolder = "";
             string sourceOfImage = "";
             string sourceOfFolderAndImage = "";
+
+
+
+
 
             while (true)
             {
@@ -123,7 +91,7 @@ namespace MorzkulcPhotoConverterUpgrade
                     { 
                         try
                         {
-                            Console.WriteLine("Provide source folder file e.g 'e:\\convert"); 
+                            Console.WriteLine("Provide source folder file e.g 'e:\\programowanie"); 
                             sourceOfFolder = Console.ReadLine();
                             //sourceOfFolder = "e:\\programowanie"; // temporary testValue for a folder
                             Console.WriteLine("Provide source image e.g. 'plakat.png'"); 
@@ -131,8 +99,17 @@ namespace MorzkulcPhotoConverterUpgrade
                             //sourceOfImage = "plakat.png"; // temporary testValue for an image
                             sourceOfFolderAndImage = sourceOfFolder + "\\" + sourceOfImage;
                             Console.WriteLine("source of Folder and Image: " + sourceOfFolderAndImage);
-                            break;
+
+                            if (File.Exists(sourceOfFolderAndImage))
+                            {
+                                Console.WriteLine("file exist!");
+                                break;
+                            }
+                            else
+                                Console.WriteLine("wrong input, please repeat!");
+                                
                         }
+
                         catch (FileNotFoundException)
                         {
                             Console.WriteLine("File not found! Provide a proper source file e.g 'e:\\convert\\plakat.png'");
@@ -151,15 +128,18 @@ namespace MorzkulcPhotoConverterUpgrade
                     {
                         try
                         {
-                            Console.WriteLine(@"Please, provide source folder, e.g 'e:\programy'");
+                            Console.WriteLine(@"Please, provide source folder, e.g 'e:\programowanie'");
                             sourceOfFolder = Console.ReadLine();
                             //sourceOfFolder = "e:\\programowanie"; // temporary testValue for a folder
 
                             if (Directory.Exists(sourceOfFolder))
                             {
                                 Console.WriteLine("directory exists!");
+                                break;
                             }
-                            break;
+                            else
+                                Console.WriteLine("wrong input, please repeat!");
+
                         }
 
                         catch (Exception)
@@ -178,11 +158,7 @@ namespace MorzkulcPhotoConverterUpgrade
             return Tuple.Create(input, sourceOfFolder, sourceOfFolderAndImage);
         }
 
-        */
-
-
-
-        public static int WidthMethod ()
+        public static int Width ()
            
         {
             string widthCheck;
@@ -211,7 +187,7 @@ namespace MorzkulcPhotoConverterUpgrade
             return widthM;
         }
 
-        public static int HeightMethod ()
+        public static int Height ()
         {
             string heightCheck;
             int heightM;
@@ -235,12 +211,13 @@ namespace MorzkulcPhotoConverterUpgrade
                 {
                     Console.WriteLine("Something else went wrong.");
                 }
+               
             }
 
             return heightM;
         }
 
-        public static string FormatMethodCheck()
+        public static string FormatCheck()
         {
             string[] formatArray = new string[] { "jpg", "png", "gif", "ico" }; // array containing formats to be searched for when looking for images in folders.
             string formatInput;
@@ -261,9 +238,10 @@ namespace MorzkulcPhotoConverterUpgrade
             }
             return formatInput;
         }
-
-        public static string[] FileExtractionMethod(string sourceOfImageM)
+        
+        public static string[] FileExtraction(string sourceOfImageM)
         {
+            string destination = "";
             string[] formatOfFileInRootFolder = new string[] { "*.jpg|*.png|*.gif|*.tiff" };
             string joinedformatOfFileInRootFolder = string.Join("|", formatOfFileInRootFolder);
 
@@ -277,7 +255,7 @@ namespace MorzkulcPhotoConverterUpgrade
             }
             return files;
         }
-
+        
         /// <summary>
         /// GetFiles method to get more than one extension
         /// </summary>
@@ -285,16 +263,21 @@ namespace MorzkulcPhotoConverterUpgrade
         /// <param name="searchPattern"></param>
         /// <param name="searchOption"></param>
         /// <returns></returns>
-        public static string[] GetFiles(string path, string searchPattern, SearchOption searchOption)
+
+
+ 
+             public static string[] GetFiles(string path, string searchPattern, SearchOption searchOption)
         {
 
             string[] searchPatterns = searchPattern.Split('|');
             List<string> files = new List<string>();
+            
             foreach (string sp in searchPatterns)
                 files.AddRange(Directory.GetFiles(path, sp, searchOption)); 
             files.Sort();
             return files.ToArray();
         }
+    
 
-    }
+}
 }
