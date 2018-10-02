@@ -1,3 +1,3 @@
-# Project1
+# Photo Converter
 
-Project for learning purposes. 
+Console Photo converter for mass conversion. C#
